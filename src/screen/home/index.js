@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './index.css';
+import ProjectList from './projectlist';
+import SelectStaff from './selecteStaff';
+const screenWidth = window.innerWidth;
 const Home = () => {
+    const [projectFlowNo, setProjectFlowNo] = useState(1);
+    const renderContent = () => {
+        switch (projectFlowNo) {
+            case 1:
+                return <ProjectList setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 2:
+                return <SelectStaff />
+                break;
+            default:
+        }
+    }
+
     return (
         <div>
             {/* <header class="header" id="header">
                 <div class="header_toggle"> <i class='bx bx-menu' id="header-toggle"></i> </div>
                 <div class="header_img"> <img src="https://i.imgur.com/hczKIze.jpg" alt="" /> </div>
             </header> */}
-            <div class="l-navbar" id="nav-bar" style={{ width: 200 }}>
+            <div class="l-navbar" id="nav-bar" style={{ width: 230 }}>
                 <nav class="nav">
                     <div> <a class="nav_logo"> <i class='bx bx-layer nav_logo-icon'></i> <span class="nav_logo-name" style={{ fontSize: 15, marginLeft: -10 }}>ANNA UNIVERSITY</span> </a>
                         <div class="nav_list">
@@ -21,9 +37,9 @@ const Home = () => {
                     </div> <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span> </a>
                 </nav>
             </div>
-
-            <div class="height-100 bg-light" style={{ marginTop: -65, width: "89.5vw", marginLeft: 100 }}>
-                <h4>Home</h4>
+            {/* {renderContent()} */}
+            <div class="height-100 bg-light" style={{ marginTop: -65, width: "91.3%", marginLeft: 130 }}>
+                <center>{renderContent()}</center>
             </div>
 
         </div>
