@@ -80,7 +80,16 @@ const ReviewList = (props) => {
                                             style={{}}
                                             onClick={() => {
                                                 // setSelectedBatchForMoreDetailsFunc(item)
-                                                props.setProjectFlowNo(4);
+                                                if (item.uuid == "70a36fa4-befd-11ec-9d64-0242ac120002") {
+                                                    props.setProjectFlowNo(4);
+                                                } else if (item.uuid == "8b6c6372-befd-11ec-9d64-0242ac120002") {
+                                                    props.setProjectFlowNo(5);
+                                                } else if (item.uuid == "a053ae58-befd-11ec-9d64-0242ac120002") {
+                                                    props.setProjectFlowNo(6);
+                                                } else if (item.uuid == "b9eb59c4-befd-11ec-9d64-0242ac120002") {
+                                                    props.setProjectFlowNo(7);
+                                                }
+
                                             }}
 
                                             type="button" class="btn btn-info">Mark</button>

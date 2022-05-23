@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 import BatchByProject from './batch';
 import ReviewList from './reviewList';
 import FirstReviewMarkList from './reviewOne';
+import SecondReviewMarkList from './reviewTwo';
+import ThirdReviewMarkList from './reviewThree';
+import FinalReviewMarkList from './finalReview';
 const FinalMark = () => {
     const [projectFlowNo, setProjectFlowNo] = useState(1);
     const navigation = useNavigate();
@@ -21,6 +24,15 @@ const FinalMark = () => {
                 break;
             case 4:
                 return <FirstReviewMarkList setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 5:
+                return <SecondReviewMarkList setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 6:
+                return <ThirdReviewMarkList setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 7:
+                return <FinalReviewMarkList setProjectFlowNo={setProjectFlowNo} />
                 break;
             default:
         }

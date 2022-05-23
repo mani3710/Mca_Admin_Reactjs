@@ -113,6 +113,42 @@ export const getFirstReviewMarks = createAsyncThunk(
             alert(error);
         }
     });
+export const getReviewTwoMarks = createAsyncThunk(
+    'projectlist/getReviewTwoMarks',
+    async (batchid) => {
+        try {
+            console.log("batchid", batchid);
+            const result = await API.get(`/marks/get/review/two?batchid=${batchid}`);
+            console.log(result.data);
+            return { result: result.data };
+        } catch (error) {
+            alert(error);
+        }
+    });
+export const getReviewThreeMarks = createAsyncThunk(
+    'projectlist/getReviewThreeMarks',
+    async (batchid) => {
+        try {
+            //console.log("batchid", batchid);
+            const result = await API.get(`/marks/get/review/three?batchid=${batchid}`);
+            console.log(result.data);
+            return { result: result.data };
+        } catch (error) {
+            alert(error);
+        }
+    });
+export const getFinalReviewMarks = createAsyncThunk(
+    'projectlist/getFinalReviewMarks',
+    async (batchid) => {
+        try {
+            //console.log("batchid", batchid);
+            const result = await API.get(`/marks/get/review/final?batchid=${batchid}`);
+            console.log(result.data);
+            return { result: result.data };
+        } catch (error) {
+            alert(error);
+        }
+    });
 const projectlistSclice = createSlice({
     name: "projectlist",
     initialState: {
@@ -134,7 +170,10 @@ const projectlistSclice = createSlice({
 
         },
         reviewList: [],
-        firstReviewMarkList: []
+        firstReviewMarkList: [],
+        secondReviewMarkList: [],
+        thirdReviewMarkList: [],
+        finalReviewMarkList: []
     },
     reducers: {
         setSelectedBatchData: (state, action) => {
@@ -269,6 +308,41 @@ const projectlistSclice = createSlice({
 
         });
 
+        builder.addCase(getReviewTwoMarks.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(getReviewTwoMarks.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            state.secondReviewMarkList = action.payload.result.data;
+        });
+        builder.addCase(getReviewTwoMarks.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
+
+        builder.addCase(getReviewThreeMarks.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(getReviewThreeMarks.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            state.thirdReviewMarkList = action.payload.result.data;
+        });
+        builder.addCase(getReviewThreeMarks.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
+
+        builder.addCase(getFinalReviewMarks.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(getFinalReviewMarks.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            state.finalReviewMarkList = action.payload.result.data;
+        });
+        builder.addCase(getFinalReviewMarks.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
 
 
     }
