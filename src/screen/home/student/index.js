@@ -6,13 +6,14 @@ import { useNavigate } from 'react-router-dom';
 import Drawer from 'react-drag-drawer';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, ButtonGroup, Container, ButtonToolbar, Jumbotron, Card } from 'react-bootstrap';
-import { getStaffList, setSelectedStaffList, removeSelectedStaffList } from '../../../redux/reducer/staff';
-const SelectStaff = (props) => {
+import { getStudentList, setSelectedstudentDataList, removeSelectedStudentList } from '../../../redux/reducer/student';
+const SelectStudent = (props) => {
     const dispatch = useDispatch();
     //Store 
     const authStore = useSelector(state => state.auth);
     const projectlistStore = useSelector(state => state.projectlist);
     const staffStore = useSelector(state => state.staff);
+    const studentStore = useSelector(state => state.student);
     const {
         authLoader,
         adminDetails
@@ -23,29 +24,29 @@ const SelectStaff = (props) => {
         selectedBatchData
     } = projectlistStore;
     const {
-        staffLoader,
-        staffListData,
-        selectedStaffList
-    } = staffStore;
+        studentLoader,
+        studentListData,
+        selectedstudentDataList
+    } = studentStore;
 
-    const [staffSearchText, setStaffSearchText] = useState("");
+    const [studentSearchText, setStudentSearchText] = useState("");
     const [filetedDataList, setFiletedDataList] = useState([]);
-    // const [seletedStaffList, setSeletedStaffList] = useState([]);
+    //  const [seletedStudentList, setSeletedStudentList] = useState([]);
     const [showSearch, setShowSearch] = useState(false);
     useEffect(() => {
-        getStaffListFunc()
+        getStudentListFunc()
     }, []);
-    const getStaffListFunc = () => {
-        dispatch(getStaffList());
+    const getStudentListFunc = () => {
+        dispatch(getStudentList());
     }
 
     const handleFilter = (e) => {
         let lowerCaseText = e.toLowerCase();
         let newFilter = [];
         setShowSearch(true)
-
-        for (let obj of staffListData) {
-            let nameLowerCase = obj.username.toLowerCase();
+        console.log(studentListData);
+        for (let obj of studentListData) {
+            let nameLowerCase = obj.rollno.toLowerCase();
             let n = nameLowerCase.search(lowerCaseText);
             if (n >= 0) {
                 newFilter.push(obj);
@@ -55,26 +56,25 @@ const SelectStaff = (props) => {
     }
 
     const removeItem = (index) => {
-        dispatch(removeSelectedStaffList(index))
+        dispatch(removeSelectedStudentList(index));
 
     }
 
-    const setSelectedStaffListFunc = () => {
-        //dispatch(setSelectedStaffList(seletedStaffList));
-        props.setProjectFlowNo(4);
+    const setSelectedStudentListFunc = () => {
+        //dispatch(setSelectedstudentDataList(seletedStudentList));
+        props.setProjectFlowNo(5);
     }
 
     return (
         <center>
             <div class="height-100 bg-light" style={{ width: "95%", backgroundColor: "red" }}>
-                <center><label style={{ marginTop: 20, fontWeight: "bold", fontSize: 30, marginBottom: 20 }}>Selecte Staff</label></center>
+                <center><label style={{ marginTop: 20, fontWeight: "bold", fontSize: 30, marginBottom: 20 }}>Selecte Student</label></center>
 
                 <center>
                     <input
-                        value={staffSearchText}
+                        value={studentSearchText}
                         onChange={(e) => {
-                            // setStaffSearchText(e.target.value);
-                            // handleFilter(e.target.value)
+
 
                             if (!e.target.value) {
                                 setFiletedDataList([]);
@@ -82,7 +82,7 @@ const SelectStaff = (props) => {
                             } else {
                                 handleFilter(e.target.value)
                             }
-                            setStaffSearchText(e.target.value);
+                            setStudentSearchText(e.target.value);
                         }}
                         style={{
                             marginLeft: 10,
@@ -92,8 +92,8 @@ const SelectStaff = (props) => {
                             backgroundColor: "transparent",
                             fontSize: 18, marginBottom: 20
                         }}
-                        type="text" id="fname" name="fname"
-                        placeholder="Search staff name"
+                        type="number" id="fname" name="fname"
+                        placeholder="Search student roll no"
                     />
                 </center>
 
@@ -107,9 +107,11 @@ const SelectStaff = (props) => {
 
                                 <div class="p-2 bd-highlight">
                                     <label
-                                        onClick={() => { setFiletedDataList([]); setShowSearch(false); setStaffSearchText(""); }}
+                                        onClick={() => { setFiletedDataList([]); setShowSearch(false); setStudentSearchText(""); }}
                                         style={{ marginRight: 15, fontWeight: "bold" }}>X</label>
                                 </div>
+
+
                             </div>}
 
                             {filetedDataList.map((item, i) => {
@@ -118,21 +120,21 @@ const SelectStaff = (props) => {
                                         <label
                                             onClick={() => {
                                                 let flag = true;
-                                                for (let obj of selectedStaffList) {
+                                                for (let obj of selectedstudentDataList) {
                                                     if (obj.uuid == item.uuid) {
                                                         flag = false;
                                                     }
                                                 }
                                                 if (flag) {
-                                                    // setSeletedStaffList([...seletedStaffList, item]);
-                                                    dispatch(setSelectedStaffList(item));
+                                                    // setSeletedStudentList([...seletedStudentList, item]);
+                                                    dispatch(setSelectedstudentDataList(item))
                                                     setFiletedDataList([]);
                                                     setShowSearch(false)
-                                                    setStaffSearchText("");
+                                                    setStudentSearchText("");
                                                 }
 
                                             }}
-                                            style={{ marginTop: 15 }}>{item.username}</label>
+                                            style={{ marginTop: 15 }}>{item.rollno}, {item.username}</label>
                                     </div>
                                 )
                             })}
@@ -140,14 +142,14 @@ const SelectStaff = (props) => {
 
                     </center>
                 </div>
-                {selectedStaffList.length != 0 && <div class="d-flex flex-row-reverse bd-highlight">
+                {selectedstudentDataList.length != 0 && <div class="d-flex flex-row-reverse bd-highlight">
 
 
                     <div class="p-2 bd-highlight">
                         <button
                             onClick={() => {
                                 //setIsShowCreateProject(true)
-                                setSelectedStaffListFunc()
+                                setSelectedStudentListFunc();
                             }}
                             type="button" class="btn btn-warning">NEXT</button>
                     </div>
@@ -155,50 +157,51 @@ const SelectStaff = (props) => {
                         <button
                             onClick={() => {
                                 //setIsShowCreateProject(true)
-                                props.setProjectFlowNo(2);
+                                props.setProjectFlowNo(3);
                             }}
                             type="button" class="btn btn-secondary">Back</button>
                     </div>
 
-
                 </div>}
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Sno</th>
-                            <th scope="col">User Name</th>
-                            <th scope="col">staffid</th>
-                            <th scope="col">Email</th>
-                            <th scope="col"></th>
+                <div style={{ overflow: "auto", height: "75vh" }}>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Sno</th>
+                                <th scope="col">Roll no</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col"></th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {selectedStaffList.map((item, i) => {
-                            return (
-                                <tr>
-                                    <th scope="col">{i + 1}</th>
-                                    <th scope="col">{item.username}</th>
-                                    <th scope="col" >{item.staffid}</th>
-                                    <th scope="col" >{item.email}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {selectedstudentDataList.map((item, i) => {
+                                return (
+                                    <tr>
+                                        <th scope="col">{i + 1}</th>
+                                        <th scope="col" >{item.rollno}</th>
+                                        <th scope="col">{item.username}</th>
+                                        <th scope="col" >{item.email}</th>
 
-                                    <th scope="col" >
-                                        <button
-                                            style={{ width: 100, height: 40 }}
-                                            onClick={() => {
-                                                removeItem(i);
-                                            }}
+                                        <th scope="col" >
+                                            <button
+                                                style={{ width: 100, height: 40 }}
+                                                onClick={() => {
+                                                    removeItem(i);
+                                                }}
 
-                                            type="button" class="btn btn-info">REMOVE</button>
-                                    </th>
-                                </tr>
-                            )
-                        })}
+                                                type="button" class="btn btn-info">REMOVE</button>
+                                        </th>
+                                    </tr>
+                                )
+                            })}
 
 
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
 
@@ -208,4 +211,4 @@ const SelectStaff = (props) => {
     )
 }
 
-export default SelectStaff;
+export default SelectStudent;

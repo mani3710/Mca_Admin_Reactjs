@@ -21,11 +21,22 @@ const staffSclice = createSlice({
     initialState: {
         staffLoader: false,
         staffListData: [],
-
+        selectedStaffList: []
 
     },
     reducers: {
+        setSelectedStaffList: (state, action) => {
+            state.selectedStaffList = [...state.selectedStaffList, action.payload];
+        },
+        removeSelectedStaffList: (state, action) => {
 
+            let newObj = state.selectedStaffList;
+            newObj.splice(action.payload, 1)
+            state.selectedStaffList = newObj;
+        },
+        emptySelectedStaffList: (state, action) => {
+            state.selectedStaffList = [];
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getStaffList.pending, (state) => {
@@ -47,16 +58,12 @@ const staffSclice = createSlice({
 
         });
 
-
-
-
-
-
-
-
-
     }
 });
-
+export const {
+    setSelectedStaffList,
+    removeSelectedStaffList,
+    emptySelectedStaffList
+} = staffSclice.actions;
 
 export default staffSclice.reducer;

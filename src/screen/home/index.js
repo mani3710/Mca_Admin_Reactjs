@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './index.css';
 import ProjectList from './projectlist';
 import SelectStaff from './selecteStaff';
+import BatchList from './batch';
+import Student from './student';
+import BatchSummery from './batchSummery';
 const screenWidth = window.innerWidth;
 const Home = () => {
     const [projectFlowNo, setProjectFlowNo] = useState(1);
@@ -11,7 +14,16 @@ const Home = () => {
                 return <ProjectList setProjectFlowNo={setProjectFlowNo} />
                 break;
             case 2:
-                return <SelectStaff />
+                return <BatchList setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 3:
+                return <SelectStaff setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 4:
+                return <Student setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 5:
+                return <BatchSummery setProjectFlowNo={setProjectFlowNo} />
                 break;
             default:
         }

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
-import { getProjectList, createNewProject } from '../../../redux/reducer/projectlist';
+import { getProjectList, createNewProject, createBatch } from '../../../redux/reducer/projectlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Drawer from 'react-drag-drawer';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, ButtonGroup, Container, ButtonToolbar, Jumbotron, Card } from 'react-bootstrap';
 const ProjectList = (props) => {
-    const dipatch = useDispatch();
+    const dispatch = useDispatch();
 
     //Store 
     const authStore = useSelector(state => state.auth);
@@ -18,25 +18,28 @@ const ProjectList = (props) => {
     } = authStore;
     const {
         projectLoader,
-        projectListData
+        projectListData,
+        currentProjectDetails
     } = projectlistStore;
     const [isShowCreateProject, setIsShowCreateProject] = useState(false);
     const [newProjectName, setNewProjectName] = useState("");
     const [projectCreateError, setProjectCreateError] = useState("");
+    const [noOfBatch, setNoOfBatch] = useState(1);
     const [isShowBatch, setIsShowBatch] = useState(false);
+    const [batchCreateError, setBatchCreateError] = useState("");
 
     useEffect(() => {
         getProjectListFunc()
     }, [])
 
     const getProjectListFunc = () => {
-        dipatch(getProjectList(adminDetails?.uuid ? adminDetails.uuid : "029a62a4-c378-11ec-9d64-0242ac120002"))
+        dispatch(getProjectList(adminDetails?.uuid ? adminDetails.uuid : "029a62a4-c378-11ec-9d64-0242ac120002"))
     }
     const createProjectFunc = async () => {
         if (newProjectName) {
             setProjectCreateError("");
 
-            await dipatch(createNewProject(
+            await dispatch(createNewProject(
                 {
                     uuid: uuidv4(),
                     title: newProjectName,
@@ -49,6 +52,25 @@ const ProjectList = (props) => {
             setIsShowBatch(true);
         } else {
             setProjectCreateError("Empty Field Found!");
+        }
+    }
+    const creatBatchFunc = () => {
+
+        if (noOfBatch) {
+            let bodyArray = [];
+            for (let i = 0; i < noOfBatch; i++) {
+                bodyArray.push({
+                    "uuid": uuidv4(),
+                    "title": `Batch ${i + 1}`,
+                    "adminid": adminDetails?.uuid ? adminDetails.uuid : "029a62a4-c378-11ec-9d64-0242ac120002",
+                    "projectid": currentProjectDetails?.uuid ? currentProjectDetails.uuid : "029a62a4-c378-11ec-9d64-0242ac120002"
+                })
+            }
+            dispatch(createBatch(bodyArray));
+            setIsShowBatch(false);
+            props.setProjectFlowNo(2);
+        } else {
+            setBatchCreateError("Empty Field Found!")
         }
     }
 
@@ -74,41 +96,43 @@ const ProjectList = (props) => {
                         <label style={{ marginTop: 5 }}>User :</label>
                     </div> */}
                 </div>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Sno</th>
-                            <th scope="col">User Name</th>
-                            <th scope="col">Password</th>
-                            <th scope="col">Security</th>
+                <div style={{ overflow: "auto", height: "82vh" }}>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Sno</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">Title</th>
+                                {/* <th scope="col"></th> */}
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {projectListData.map((item, i) => {
-                            return (
-                                <tr>
-                                    <th scope="col">{i + 1}</th>
-                                    <th scope="col">{item.uuid}</th>
-                                    <th scope="col" >{item.title}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {projectListData.map((item, i) => {
+                                return (
+                                    <tr>
+                                        <th scope="col">{i + 1}</th>
+                                        <th scope="col">{item.uuid}</th>
+                                        <th scope="col" >{item.title}</th>
 
-                                    <th scope="col" >
-                                        <button
-                                            style={{ width: 100, height: 40 }}
-                                            onClick={() => {
+                                        {/* <th scope="col" >
+                                            <button
+                                                style={{ width: 100, height: 40 }}
+                                                onClick={() => {
 
-                                            }}
+                                                }}
 
-                                            type="button" class="btn btn-info">INFO</button>
-                                    </th>
-                                </tr>
-                            )
-                        })}
+                                                type="button" class="btn btn-info">INFO</button>
+                                        </th> */}
+                                    </tr>
+                                )
+                            })}
 
 
 
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
 
             </div>
             <Drawer
@@ -116,7 +140,6 @@ const ProjectList = (props) => {
                 open={isShowCreateProject}
                 // onRequestClose={this.toggle}
                 direction='left'
-
             >
 
                 <Card style={{ backgroundColor: "white", height: 280, width: 400 }}>
@@ -191,9 +214,9 @@ const ProjectList = (props) => {
 
                                     <div></div>
                                     <input
-                                        value={newProjectName}
+                                        value={noOfBatch}
                                         onChange={(e) => {
-                                            setNewProjectName(e.target.value);
+                                            setNoOfBatch(e.target.value);
                                         }}
                                         style={{ marginLeft: 10, borderColor: "transparent", borderBottomColor: "gray", textAlign: "center", width: "80%" }}
                                         type="number" id="fname" name="fname"
@@ -204,7 +227,7 @@ const ProjectList = (props) => {
 
 
                             </form>
-                            <center><label style={{ color: "red", marginTop: 10 }}>{projectCreateError}</label></center>
+                            <center><label style={{ color: "red", marginTop: 10 }}>{batchCreateError}</label></center>
                             <div style={{ marginTop: 24 }}>
                                 <button
                                     style={{ width: 100, height: 40 }}
@@ -216,7 +239,7 @@ const ProjectList = (props) => {
                                 <button
                                     style={{ marginLeft: 55, width: 100, height: 40 }}
                                     onClick={() => {
-                                        // createProjectFunc()
+                                        creatBatchFunc()
                                     }}
 
                                     type="button" class="btn btn-warning">CREATE</button>
