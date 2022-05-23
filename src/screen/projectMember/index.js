@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import Drawer from 'react-drag-drawer';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, ButtonGroup, Container, ButtonToolbar, Jumbotron, Card } from 'react-bootstrap';
-
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 const ProjectMember = (props) => {
     const dispatch = useDispatch();
 
@@ -36,7 +37,31 @@ const ProjectMember = (props) => {
     useEffect(() => {
         dispatch(getProjectMember(selectedBatchForMoreDetailsObj.uuid))
     }, [])
+    const exportStundet = () => {
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
 
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+
+        doc.setFontSize(15);
+
+        const title = `${selectedBatchForMoreDetailsObj.title}`;
+        const headers = [["NAME", "ROLL NUMBER"]];
+
+        const data = selectedProjectMember.student.map(elt => [elt.username, elt.rollno]);
+
+        let content = {
+            startY: 50,
+            head: headers,
+            body: data
+        };
+
+        doc.text(title, marginLeft, 40);
+        doc.autoTable(content);
+        doc.save(`${selectedBatchForMoreDetailsObj.title} students.pdf`)
+    }
 
     return (
         <center>
@@ -49,6 +74,7 @@ const ProjectMember = (props) => {
                         <button
                             onClick={() => {
                                 props.setProjectFlowNo(6);
+                                // exportStundet()
                             }}
                             type="button" class="btn btn-secondary">BACK</button>
                     </div>
@@ -86,7 +112,18 @@ const ProjectMember = (props) => {
                     <div style={{ width: "100%", textAlign: "start" }}>
                         <label style={{ marginTop: 20, fontWeight: "bold", fontSize: 30, marginBottom: 20 }}>Student</label>
                     </div>
+                    <div class="d-flex flex-row-reverse bd-highlight">
 
+
+                        <div class="p-2 bd-highlight">
+                            <button
+                                onClick={() => {
+                                    //  props.setProjectFlowNo(6);
+                                    exportStundet()
+                                }}
+                                type="button" class="btn btn-link">Download Student List</button>
+                        </div>
+                    </div>
                     <table class="table">
                         <thead>
                             <tr>

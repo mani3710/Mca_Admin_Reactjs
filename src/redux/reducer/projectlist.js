@@ -88,6 +88,31 @@ export const getProjectMember = createAsyncThunk(
             alert(error);
         }
     });
+export const getReviewList = createAsyncThunk(
+    'projectlist/getReviewList',
+    async () => {
+        try {
+
+            const result = await API.get(`/admin/get/review`);
+            console.log(result.data);
+            return { result: result.data };
+
+        } catch (error) {
+            alert(error);
+        }
+    });
+export const getFirstReviewMarks = createAsyncThunk(
+    'projectlist/getFirstReviewMarks',
+    async (batchid) => {
+        try {
+            console.log("batchid", batchid);
+            const result = await API.get(`/marks/get/review/first?batchid=${batchid}`);
+            console.log(result.data);
+            return { result: result.data };
+        } catch (error) {
+            alert(error);
+        }
+    });
 const projectlistSclice = createSlice({
     name: "projectlist",
     initialState: {
@@ -107,7 +132,9 @@ const projectlistSclice = createSlice({
         },
         selectedBatchForMoreDetailsObj: {
 
-        }
+        },
+        reviewList: [],
+        firstReviewMarkList: []
     },
     reducers: {
         setSelectedBatchData: (state, action) => {
@@ -214,6 +241,30 @@ const projectlistSclice = createSlice({
 
         });
         builder.addCase(getProjectMember.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
+
+        builder.addCase(getReviewList.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(getReviewList.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            state.reviewList = action.payload.result.data;
+        });
+        builder.addCase(getReviewList.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
+
+        builder.addCase(getFirstReviewMarks.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(getFirstReviewMarks.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            state.firstReviewMarkList = action.payload.result.data;
+        });
+        builder.addCase(getFirstReviewMarks.rejected, (state) => {
             state.projectLoader = false;
 
         });

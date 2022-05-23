@@ -51,7 +51,7 @@ const Home = () => {
                         <div class="nav_list">
 
                             <label onClick={() => { navigation("/home") }} class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> </label>
-                            <label onClick={() => { navigation("/finalmark") }} class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Final Mark</span> </label>
+                            <label onClick={() => { navigation("/finalmark") }} class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Mark</span> </label>
                             <label onClick={() => { navigation("/downloadpdf") }} class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Download PDF</span> </label>
                             <label onClick={() => { navigation("/staff") }} class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Staff</span> </label>
                             <label onClick={() => { navigation("/student") }} class="nav_link"> <i class='bx bx-user nav_icon'></i> <span class="nav_name">Student</span> </label>
