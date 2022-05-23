@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './index.css';
-import { getProjectList, createNewProject, createBatch } from '../../../redux/reducer/projectlist';
+import { getProjectList, createNewProject, createBatch, setSelectedProjectForViewMore } from '../../../redux/reducer/projectlist';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Drawer from 'react-drag-drawer';
@@ -103,7 +103,7 @@ const ProjectList = (props) => {
                                 <th scope="col">Sno</th>
                                 <th scope="col">ID</th>
                                 <th scope="col">Title</th>
-                                {/* <th scope="col"></th> */}
+                                <th scope="col"></th>
 
                             </tr>
                         </thead>
@@ -115,15 +115,16 @@ const ProjectList = (props) => {
                                         <th scope="col">{item.uuid}</th>
                                         <th scope="col" >{item.title}</th>
 
-                                        {/* <th scope="col" >
+                                        <th scope="col" >
                                             <button
                                                 style={{ width: 100, height: 40 }}
                                                 onClick={() => {
-
+                                                    dispatch(setSelectedProjectForViewMore(item));
+                                                    props.setProjectFlowNo(6);
                                                 }}
 
                                                 type="button" class="btn btn-info">INFO</button>
-                                        </th> */}
+                                        </th>
                                     </tr>
                                 )
                             })}

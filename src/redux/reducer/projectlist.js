@@ -61,6 +61,33 @@ export const assignStaffAndStudent = createAsyncThunk(
             alert(error);
         }
     });
+export const getBatchByProject = createAsyncThunk(
+    'projectlist/getBatchByProject',
+    async (data) => {
+        try {
+
+            const result = await API.get(`/admin/getProjectBatchList?adminid=${data.adminID}&projectid=${data.projectID}`);
+            console.log(result.data);
+            return { result: result.data };
+
+        } catch (error) {
+            alert(error);
+        }
+    });
+
+export const getProjectMember = createAsyncThunk(
+    'projectlist/getProjectMember',
+    async (batchid) => {
+        try {
+
+            const result = await API.get(`/admin/get/members?batchid=${batchid}`);
+            console.log(result.data);
+            return { result: result.data };
+
+        } catch (error) {
+            alert(error);
+        }
+    });
 const projectlistSclice = createSlice({
     name: "projectlist",
     initialState: {
@@ -68,31 +95,29 @@ const projectlistSclice = createSlice({
         projectListData: [],
         currentProjectDetails: {},
         batchListData: [
-            {
-                "adminid": "029a62a4-c378-11ec-9d64-0242ac120002",
-                "projectid": "1becfccb-798c-4faf-b4e1-cae42dcfdd5a",
-                "title": "batch 1",
-                "uuid": "013e81df-b697-48f2-ae08-4b35ebc9bafc",
-                "status": "Pending"
-            },
-            {
-                "adminid": "029a62a4-c378-11ec-9d64-0242ac120002",
-                "projectid": "1becfccb-798c-4faf-b4e1-cae42dcfdd5a",
-                "title": "batch 2",
-                "uuid": "4c17ea2d-de3d-4fab-a2c7-30a6ff70b424",
-                "status": "Pending"
-            }
+
         ],
         selectedBatchData: {
-            "adminid": "029a62a4-c378-11ec-9d64-0242ac120002",
-            "projectid": "1becfccb-798c-4faf-b4e1-cae42dcfdd5a",
-            "title": "batch 1",
-            "uuid": "013e81df-b697-48f2-ae08-4b35ebc9bafc"
+        },
+        selectedProjectForViewMore: {},
+        selectedBatchForMoreDetails: [],
+        selectedProjectMember: {
+            student: [],
+            staff: []
+        },
+        selectedBatchForMoreDetailsObj: {
+
         }
     },
     reducers: {
         setSelectedBatchData: (state, action) => {
             state.selectedBatchData = action.payload;
+        },
+        setSelectedProjectForViewMore: (state, action) => {
+            state.selectedProjectForViewMore = action.payload;
+        },
+        setSelectedBatchForMoreDetails: (state, action) => {
+            state.selectedBatchForMoreDetailsObj = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -166,9 +191,41 @@ const projectlistSclice = createSlice({
 
         });
 
+        builder.addCase(getBatchByProject.pending, (state) => {
+            state.projectLoader = true;
+
+        });
+        builder.addCase(getBatchByProject.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            state.selectedBatchForMoreDetails = action.payload.result.data;
+
+        });
+        builder.addCase(getBatchByProject.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
+
+        builder.addCase(getProjectMember.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(getProjectMember.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            state.selectedProjectMember = action.payload.result.data;
+
+        });
+        builder.addCase(getProjectMember.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
+
+
 
     }
 });
-export const { setSelectedBatchData } = projectlistSclice.actions;
+export const {
+    setSelectedBatchData,
+    setSelectedProjectForViewMore,
+    setSelectedBatchForMoreDetails
+} = projectlistSclice.actions;
 
 export default projectlistSclice.reducer;
