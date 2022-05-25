@@ -150,6 +150,7 @@ const ReviewTwo = (props) => {
                             <th scope="col">Name</th>
                             <th scope="col">DetailesDesign</th>
                             <th scope="col">Implementation</th>
+                            <th scope="col">Result</th>
                             <th scope="col">Report</th>
                             <th scope="col">Total</th>
                         </tr>
@@ -165,7 +166,7 @@ const ReviewTwo = (props) => {
                                     <th scope="col" >{parseFloat(item.implementationmark).toFixed(1)}</th>
                                     <th scope="col" >{parseFloat(item.performanceandresultmark).toFixed(1)}</th>
                                     <th scope="col" >{parseFloat(item.presentationandreportmark).toFixed(1)}</th>
-                                    <th scope="col" >{getTotalMark(item)}</th>
+                                    <th scope="col" >{parseFloat(getTotalMark(item)).toFixed(1)}</th>
 
                                 </tr>
                             )

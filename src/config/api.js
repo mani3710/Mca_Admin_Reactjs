@@ -1,9 +1,9 @@
 import axios from 'axios';
-const BASE_URL = "http://192.168.0.101:5000";
+const BASE_URL = "http://localhost:5000";
 
 const instance = axios.create({
     baseURL: BASE_URL,
-    timeout: 1000,
+    timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
         // 'Authorization': 'Token 4f2e899d0f4d1096c8e415a8326e6cdc98a5787c'

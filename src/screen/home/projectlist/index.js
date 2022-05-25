@@ -68,7 +68,7 @@ const ProjectList = (props) => {
             }
             dispatch(createBatch(bodyArray));
             setIsShowBatch(false);
-            props.setProjectFlowNo(2);
+            props.setProjectFlowNo(8);
         } else {
             setBatchCreateError("Empty Field Found!")
         }

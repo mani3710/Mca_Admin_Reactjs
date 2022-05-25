@@ -7,6 +7,7 @@ import Student from './student';
 import BatchSummery from './batchSummery';
 import BatchByProject from '../batchByProject';
 import ProjectMember from '../projectMember';
+import Review from './review';
 import { useNavigate } from 'react-router-dom';
 const screenWidth = window.innerWidth;
 const Home = () => {
@@ -34,6 +35,9 @@ const Home = () => {
                 break;
             case 7:
                 return <ProjectMember setProjectFlowNo={setProjectFlowNo} />
+                break;
+            case 8:
+                return <Review setProjectFlowNo={setProjectFlowNo} />
                 break;
             default:
         }

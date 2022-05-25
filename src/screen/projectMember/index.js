@@ -87,6 +87,7 @@ const ProjectMember = (props) => {
                         <thead>
                             <tr>
                                 <th scope="col">Sno</th>
+                                <th scope="col">uuid</th>
                                 <th scope="col">Staff id</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
@@ -97,6 +98,7 @@ const ProjectMember = (props) => {
                                 return (
                                     <tr>
                                         <th scope="col">{i + 1}</th>
+                                        <th scope="col" >{item.uuid}</th>
                                         <th scope="col" >{item.staffid}</th>
                                         <th scope="col">{item.username}</th>
                                         <th scope="col" >{item.email}</th>
@@ -128,10 +130,10 @@ const ProjectMember = (props) => {
                         <thead>
                             <tr>
                                 <th scope="col">Sno</th>
+                                <th scope="col">uuid</th>
                                 <th scope="col">Roll no</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
-
 
                             </tr>
                         </thead>
@@ -140,6 +142,7 @@ const ProjectMember = (props) => {
                                 return (
                                     <tr>
                                         <th scope="col">{i + 1}</th>
+                                        <th scope="col" >{item.uuid}</th>
                                         <th scope="col" >{item.rollno}</th>
                                         <th scope="col">{item.username}</th>
                                         <th scope="col" >{item.email}</th>
