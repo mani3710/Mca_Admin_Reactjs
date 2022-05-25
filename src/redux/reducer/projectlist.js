@@ -90,10 +90,10 @@ export const getProjectMember = createAsyncThunk(
     });
 export const getReviewList = createAsyncThunk(
     'projectlist/getReviewList',
-    async () => {
+    async (projectid) => {
         try {
 
-            const result = await API.get(`/admin/get/review`);
+            const result = await API.get(`/admin/get/review?projectid=${projectid}`);
             console.log(result.data);
             return { result: result.data };
 
@@ -103,10 +103,10 @@ export const getReviewList = createAsyncThunk(
     });
 export const getFirstReviewMarks = createAsyncThunk(
     'projectlist/getFirstReviewMarks',
-    async (batchid) => {
+    async (reviewid) => {
         try {
-            console.log("batchid", batchid);
-            const result = await API.get(`/marks/get/review/first?batchid=${batchid}`);
+            console.log("batchid", reviewid);
+            const result = await API.get(`/marks/getreview/marks?reviewid=${reviewid}`);
             console.log(result.data);
             return { result: result.data };
         } catch (error) {
@@ -173,7 +173,9 @@ const projectlistSclice = createSlice({
         firstReviewMarkList: [],
         secondReviewMarkList: [],
         thirdReviewMarkList: [],
-        finalReviewMarkList: []
+        finalReviewMarkList: [],
+        topicList: [],
+        reviewMarks: []
     },
     reducers: {
         setSelectedBatchData: (state, action) => {
@@ -301,7 +303,9 @@ const projectlistSclice = createSlice({
         });
         builder.addCase(getFirstReviewMarks.fulfilled, (state, action) => {
             state.projectLoader = false;
-            state.firstReviewMarkList = action.payload.result.data;
+            // state.firstReviewMarkList = action.payload.result.data;
+            state.topicList = action.payload.result.data.topic;
+            state.reviewMarks = action.payload.result.data.marks;
         });
         builder.addCase(getFirstReviewMarks.rejected, (state) => {
             state.projectLoader = false;

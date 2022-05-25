@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Drawer from 'react-drag-drawer';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, ButtonGroup, Container, ButtonToolbar, Jumbotron, Card } from 'react-bootstrap';
-
+import { setSelectedReview } from '../../../redux/reducer/review';
 const ReviewList = (props) => {
     const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ const ReviewList = (props) => {
 
 
     useEffect(() => {
-        dispatch(getReviewList());
+        dispatch(getReviewList(selectedProjectForViewMore.uuid));
     }, [])
 
     const setSelectedBatchForMoreDetailsFunc = (item) => {
@@ -74,21 +74,23 @@ const ReviewList = (props) => {
                                 <tr>
                                     <th scope="col">{i + 1}</th>
                                     <th scope="col">{item.uuid}</th>
-                                    <th scope="col" >{item.title}</th>
+                                    <th scope="col" >{item.reviewname}</th>
                                     <th scope="col" >
                                         <button
                                             style={{}}
                                             onClick={() => {
+                                                dispatch(setSelectedReview(item));
+                                                props.setProjectFlowNo(4);
                                                 // setSelectedBatchForMoreDetailsFunc(item)
-                                                if (item.uuid == "70a36fa4-befd-11ec-9d64-0242ac120002") {
-                                                    props.setProjectFlowNo(4);
-                                                } else if (item.uuid == "8b6c6372-befd-11ec-9d64-0242ac120002") {
-                                                    props.setProjectFlowNo(5);
-                                                } else if (item.uuid == "a053ae58-befd-11ec-9d64-0242ac120002") {
-                                                    props.setProjectFlowNo(6);
-                                                } else if (item.uuid == "b9eb59c4-befd-11ec-9d64-0242ac120002") {
-                                                    props.setProjectFlowNo(7);
-                                                }
+                                                // if (item.uuid == "70a36fa4-befd-11ec-9d64-0242ac120002") {
+                                                //     props.setProjectFlowNo(4);
+                                                // } else if (item.uuid == "8b6c6372-befd-11ec-9d64-0242ac120002") {
+                                                //     props.setProjectFlowNo(5);
+                                                // } else if (item.uuid == "a053ae58-befd-11ec-9d64-0242ac120002") {
+                                                //     props.setProjectFlowNo(6);
+                                                // } else if (item.uuid == "b9eb59c4-befd-11ec-9d64-0242ac120002") {
+                                                //     props.setProjectFlowNo(7);
+                                                // }
 
                                             }}
 

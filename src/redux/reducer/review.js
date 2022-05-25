@@ -23,7 +23,8 @@ const reviewSclice = createSlice({
         reviewLoader: false,
         reviewInfo: [
 
-        ]
+        ],
+        selectedReview: {}
 
     },
     reducers: {
@@ -32,6 +33,9 @@ const reviewSclice = createSlice({
         },
         removeReviewInfo: (state, action) => {
             state.reviewInfo.splice(action.payload, 1);
+        },
+        setSelectedReview: (state, action) => {
+            state.selectedReview = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -56,7 +60,8 @@ const reviewSclice = createSlice({
 
 export const {
     updateReviewInfo,
-    removeReviewInfo
+    removeReviewInfo,
+    setSelectedReview
 } = reviewSclice.actions;
 
 export default reviewSclice.reducer;
