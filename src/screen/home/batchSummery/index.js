@@ -23,7 +23,8 @@ const BatchSummary = (props) => {
     const {
         projectLoader,
         projectListData,
-        selectedBatchData
+        selectedBatchData,
+        currentProjectDetails
     } = projectlistStore;
     const {
         studentLoader,
@@ -48,13 +49,14 @@ const BatchSummary = (props) => {
             arrOfStaff.push({
                 batchid: selectedBatchData.uuid,
                 staffid: staff.uuid,
+                projectid: currentProjectDetails.uuid
             })
         }
         for (let student of selectedstudentDataList) {
             arrOfStudent.push({
                 batchid: selectedBatchData.uuid,
                 studentid: student.uuid,
-                guidename: "Dr.K.Vidya"
+                projectid: currentProjectDetails.uuid
             })
         }
         dispatch(assignStaffAndStudent({ student: arrOfStudent, staff: arrOfStaff, batch: selectedBatchData }));
