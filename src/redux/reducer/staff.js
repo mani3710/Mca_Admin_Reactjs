@@ -13,7 +13,17 @@ export const getStaffList = createAsyncThunk(
             alert(error);
         }
     });
+export const createStaff = createAsyncThunk(
+    'staff/createStaff',
+    async (body) => {
 
+        console.log("body createStaff", body)
+
+        const result = await API.post(`/staff/createStaff`, body);
+        return { result: result.data };
+
+
+    });
 
 
 const staffSclice = createSlice({
@@ -21,7 +31,8 @@ const staffSclice = createSlice({
     initialState: {
         staffLoader: false,
         staffListData: [],
-        selectedStaffList: []
+        selectedStaffList: [],
+        staffCreationStatus: ""
 
     },
     reducers: {
@@ -36,6 +47,9 @@ const staffSclice = createSlice({
         },
         emptySelectedStaffList: (state, action) => {
             state.selectedStaffList = [];
+        },
+        emptyStaffCreationStatus: (state, action) => {
+            state.staffCreationStatus = "";
         }
     },
     extraReducers: (builder) => {
@@ -58,12 +72,33 @@ const staffSclice = createSlice({
 
         });
 
+        builder.addCase(createStaff.pending, (state) => {
+            state.staffLoader = true;
+            state.staffCreationStatus = "";
+
+        });
+        builder.addCase(createStaff.fulfilled, (state, action) => {
+            state.staffLoader = false;
+            if (action.payload.result.status == 200) {
+                state.staffCreationStatus = "success";
+            } else {
+                state.staffCreationStatus = "failed"
+            }
+
+        });
+        builder.addCase(createStaff.rejected, (state) => {
+            state.staffLoader = false;
+            state.staffCreationStatus = "failed";
+
+        });
+
     }
 });
 export const {
     setSelectedStaffList,
     removeSelectedStaffList,
-    emptySelectedStaffList
+    emptySelectedStaffList,
+    emptyStaffCreationStatus
 } = staffSclice.actions;
 
 export default staffSclice.reducer;

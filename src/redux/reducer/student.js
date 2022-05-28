@@ -13,7 +13,18 @@ export const getStudentList = createAsyncThunk(
             alert(error);
         }
     });
+export const createStudent = createAsyncThunk(
+    'student/createStudent',
+    async (body) => {
 
+
+        console.log("body createStudent", body)
+
+        const result = await API.post(`/student/create`, body);
+        return { result: result.data };
+
+
+    });
 
 
 const studentSclice = createSlice({
@@ -21,7 +32,8 @@ const studentSclice = createSlice({
     initialState: {
         studentLoader: false,
         studentListData: [],
-        selectedstudentDataList: []
+        selectedstudentDataList: [],
+        studentCreationStatus: ""
 
     },
     reducers: {
@@ -37,16 +49,20 @@ const studentSclice = createSlice({
         emptySelectedstudentDataList: (state, action) => {
 
             state.selectedstudentDataList = [];
+        },
+        emptyStudentCreationStatus: (state, action) => {
+
+            state.studentCreationStatus = "";
         }
     },
     extraReducers: (builder) => {
         builder.addCase(getStudentList.pending, (state) => {
-            state.staffLoader = true;
+            state.studentLoader = true;
             state.loginStatus = "";
 
         });
         builder.addCase(getStudentList.fulfilled, (state, action) => {
-            state.staffLoader = false;
+            state.studentLoader = false;
             if (action.payload.result.message == "Success") {
                 state.studentListData = action.payload.result.data;
             } else {
@@ -55,7 +71,27 @@ const studentSclice = createSlice({
 
         });
         builder.addCase(getStudentList.rejected, (state) => {
-            state.staffLoader = false;
+            state.studentLoader = false;
+
+        });
+
+        builder.addCase(createStudent.pending, (state) => {
+            state.studentLoader = true;
+            state.staffCreationStatus = "";
+
+        });
+        builder.addCase(createStudent.fulfilled, (state, action) => {
+            state.studentLoader = false;
+            if (action.payload.result.status == 200) {
+                state.studentCreationStatus = "success";
+            } else {
+                state.studentCreationStatus = "failed"
+            }
+
+        });
+        builder.addCase(createStudent.rejected, (state) => {
+            state.studentLoader = false;
+            state.studentCreationStatus = "failed";
 
         });
 
@@ -64,7 +100,8 @@ const studentSclice = createSlice({
 export const {
     setSelectedstudentDataList,
     removeSelectedStudentList,
-    emptySelectedstudentDataList
+    emptySelectedstudentDataList,
+    emptyStudentCreationStatus
 } = studentSclice.actions;
 
 export default studentSclice.reducer;

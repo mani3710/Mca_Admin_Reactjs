@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import Drawer from 'react-drag-drawer';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, ButtonGroup, Container, ButtonToolbar, Jumbotron, Card } from 'react-bootstrap';
-import { getStudentList } from '../../../redux/reducer/student';
+import { getStudentList, emptyStudentCreationStatus, createStudent } from '../../../redux/reducer/student';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+let emailRegex = /^[A-Z0-9_-]+([\.][A-Z0-9_-]+)*@[A-Z0-9-]+(\.[a-zA-Z]{2,5})+$/i;
 const StudentList = (props) => {
     const dispatch = useDispatch();
 
@@ -24,7 +27,8 @@ const StudentList = (props) => {
         currentProjectDetails
     } = projectlistStore;
     const {
-        studentListData
+        studentListData,
+        studentCreationStatus
     } = studentStore;
     const [isShowCreateProject, setIsShowCreateProject] = useState(false);
     const [newProjectName, setNewProjectName] = useState("");
@@ -33,14 +37,51 @@ const StudentList = (props) => {
     const [isShowBatch, setIsShowBatch] = useState(false);
     const [batchCreateError, setBatchCreateError] = useState("");
 
+    const [isShowStudentCreation, setIsShowStudentCreation] = useState(false);
+    const [newStudentName, setNewStudentName] = useState("");
+    const [newStudenEmail, setNewStudenEmail] = useState("");
+    const [newStudentRollno, setNewStudentRollno] = useState("");
+    const [newStudentPassword, setNewStudentPassword] = useState("");
+
     useEffect(() => {
-        getStaffListFunc()
+        getStudentListFunc()
     }, [])
-    const getStaffListFunc = () => {
+    useEffect(() => {
+        if (studentCreationStatus == "success") {
+            dispatch(emptyStudentCreationStatus())
+            setIsShowStudentCreation(false);
+            getStudentListFunc()
+            toast("Successfully created")
+        } else if (studentCreationStatus == "failed") {
+            toast("Student roll no already present")
+            dispatch(emptyStudentCreationStatus())
+        }
+    }, [studentCreationStatus]);
+    const getStudentListFunc = () => {
         dispatch(getStudentList());
     }
 
-
+    const submitData = () => {
+        if (newStudentName && newStudentRollno) {
+            if (emailRegex.test(newStudenEmail)) {
+                if (newStudentPassword.length >= 6) {
+                    dispatch(createStudent({
+                        "uuid": uuidv4(),
+                        "name": newStudentName,
+                        "password": newStudentPassword,
+                        "rollno": newStudentRollno,
+                        "email": newStudenEmail
+                    }))
+                } else {
+                    toast("Password should have 6 atleast charaters");
+                }
+            } else {
+                toast("Invalide email id");
+            }
+        } else {
+            toast("Empty Field Found!");
+        }
+    }
 
 
     return (
@@ -53,9 +94,9 @@ const StudentList = (props) => {
                     <div class="p-2 bd-highlight">
                         <button
                             onClick={() => {
-                                // setIsShowCreateProject(true)
+                                setIsShowStudentCreation(true)
                             }}
-                            type="button" class="btn btn-warning">CREATE STAFF</button>
+                            type="button" class="btn btn-warning">CREATE STUDENT</button>
                     </div>
                     {/* <div class="p-2 bd-highlight">
                         <label style={{ fontWeight: "bold", marginTop: 5 }}>{adminData.username}</label>
@@ -95,6 +136,100 @@ const StudentList = (props) => {
                 </div>
 
             </div>
+            <Drawer
+
+                open={isShowStudentCreation}
+                // onRequestClose={this.toggle}
+                direction='left'
+            >
+
+                <Card style={{ backgroundColor: "white", height: 280, width: 400 }}>
+
+
+                    <Card.Body className="pl-3 " style={{ backgroundColor: "white" }}>
+                        <center>
+                            <label style={{ fontWeight: "bold" }}>ADD NEW STUDENT</label>
+                            <form >
+                                <div style={{ marginTop: 15 }}>
+                                    <label>User Name </label>
+                                    <input
+                                        value={newStudentName}
+                                        onChange={(e) => {
+                                            setNewStudentName(e.target.value);
+                                        }}
+                                        style={{ marginLeft: 10, borderColor: "transparent", borderBottomColor: "gray", textAlign: "center", width: "50%" }}
+                                        type="text" id="fname" name="fname"
+                                        placeholder="Enter user name"
+                                    />
+                                </div>
+                                <div style={{ marginTop: 15 }}>
+                                    <label>Roll no </label>
+                                    <input
+                                        value={newStudentRollno}
+                                        onChange={(e) => {
+                                            setNewStudentRollno(e.target.value);
+                                        }}
+                                        style={{ marginLeft: 30, borderColor: "transparent", borderBottomColor: "gray", textAlign: "center", width: "50%" }}
+                                        type="text" id="fname" name="fname"
+                                        placeholder="Enter Student roll no"
+                                    />
+                                </div>
+                                <div style={{ marginTop: 15 }}>
+                                    <label>Email :</label>
+                                    <input
+                                        value={newStudenEmail}
+                                        onChange={(e) => {
+                                            setNewStudenEmail(e.target.value);
+                                        }}
+                                        style={{ marginLeft: 40, borderColor: "transparent", borderBottomColor: "gray", textAlign: "center", width: "50%" }}
+                                        type="text" id="fname" name="fname"
+                                        placeholder="Enter student eamil"
+                                    />
+                                </div>
+                                <div style={{ marginTop: 15 }}>
+                                    <label>Password </label>
+                                    <input
+                                        value={newStudentPassword}
+                                        onChange={(e) => {
+                                            setNewStudentPassword(e.target.value);
+                                        }}
+                                        style={{ marginLeft: 10, borderColor: "transparent", borderBottomColor: "gray", textAlign: "center", width: "50%" }}
+                                        type="text" id="fname" name="fname"
+                                        placeholder="Enter student password"
+                                    />
+                                </div>
+
+
+
+                            </form>
+                            <center><label style={{ color: "red", marginTop: 10 }}>{projectCreateError}</label></center>
+                            <div style={{ marginTop: 24 }}>
+                                <button
+                                    style={{ width: 100, height: 40 }}
+                                    onClick={() => {
+                                        setIsShowStudentCreation(false)
+                                    }}
+
+                                    type="button" class="btn btn-info">CANCEL</button>
+                                <button
+                                    style={{ marginLeft: 55, width: 100, height: 40 }}
+                                    onClick={() => {
+                                        submitData()
+                                    }}
+
+                                    type="button" class="btn btn-warning">CREATE</button>
+                            </div>
+
+                        </center>
+
+
+
+
+                    </Card.Body>
+                </Card>
+
+            </Drawer>
+            <ToastContainer />
 
         </center >
     )

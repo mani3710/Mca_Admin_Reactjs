@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Drawer from 'react-drag-drawer';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, ButtonGroup, Container, ButtonToolbar, Jumbotron, Card } from 'react-bootstrap';
-import { getStudentList, setSelectedstudentDataList, removeSelectedStudentList } from '../../../redux/reducer/student';
+import { getStudentList, setSelectedstudentDataList, removeSelectedStudentList, emptyStaffCreationStatus } from '../../../redux/reducer/student';
 const SelectStudent = (props) => {
     const dispatch = useDispatch();
     //Store 
@@ -33,12 +33,14 @@ const SelectStudent = (props) => {
     const [filetedDataList, setFiletedDataList] = useState([]);
     //  const [seletedStudentList, setSeletedStudentList] = useState([]);
     const [showSearch, setShowSearch] = useState(false);
+
     useEffect(() => {
         getStudentListFunc()
     }, []);
     const getStudentListFunc = () => {
         dispatch(getStudentList());
     }
+
 
     const handleFilter = (e) => {
         let lowerCaseText = e.toLowerCase();
