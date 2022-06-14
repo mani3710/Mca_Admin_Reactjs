@@ -149,6 +149,20 @@ export const getFinalReviewMarks = createAsyncThunk(
             alert(error);
         }
     });
+
+export const sendNotificationToAllProjectMembers = createAsyncThunk(
+    'projectlist/sendNotificationToAllProjectMembers',
+    async (body) => {
+        try {
+
+            const result = await API.post(`/admin/notification/forproject`, body);
+            console.log(result.data);
+            return { result: result.data };
+
+        } catch (error) {
+            alert(error);
+        }
+    });
 const projectlistSclice = createSlice({
     name: "projectlist",
     initialState: {
@@ -175,7 +189,8 @@ const projectlistSclice = createSlice({
         thirdReviewMarkList: [],
         finalReviewMarkList: [],
         topicList: [],
-        reviewMarks: []
+        reviewMarks: [],
+        notificationForAllProjectMemberStatus: ""
     },
     reducers: {
         setSelectedBatchData: (state, action) => {
@@ -186,6 +201,9 @@ const projectlistSclice = createSlice({
         },
         setSelectedBatchForMoreDetails: (state, action) => {
             state.selectedBatchForMoreDetailsObj = action.payload;
+        },
+        emptyNotificationForAllProjectMemberStatus: (state, action) => {
+            state.notificationForAllProjectMemberStatus = "";
         }
     },
     extraReducers: (builder) => {
@@ -349,12 +367,31 @@ const projectlistSclice = createSlice({
         });
 
 
+        builder.addCase(sendNotificationToAllProjectMembers.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(sendNotificationToAllProjectMembers.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            if (action.payload.result.message == "Success") {
+                state.notificationForAllProjectMemberStatus = "success";
+
+            } else {
+                state.notificationForAllProjectMemberStatus = "failed";
+            }
+        });
+        builder.addCase(sendNotificationToAllProjectMembers.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
+
+
     }
 });
 export const {
     setSelectedBatchData,
     setSelectedProjectForViewMore,
-    setSelectedBatchForMoreDetails
+    setSelectedBatchForMoreDetails,
+    emptyNotificationForAllProjectMemberStatus
 } = projectlistSclice.actions;
 
 export default projectlistSclice.reducer;

@@ -87,7 +87,7 @@ const StudentList = (props) => {
     return (
         <center>
             <div class="height-100 bg-light" style={{ width: "95%", backgroundColor: "red" }}>
-                <center><label style={{ marginTop: 20, fontWeight: "bold", fontSize: 30, marginBottom: 20 }}>STAFF</label></center>
+                <center><label style={{ marginTop: 20, fontWeight: "bold", fontSize: 30, marginBottom: 20 }}>STUDENT</label></center>
                 <div class="d-flex flex-row-reverse bd-highlight">
 
 
