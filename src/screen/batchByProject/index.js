@@ -50,7 +50,7 @@ const Batch = (props) => {
     useEffect(() => {
         if (notificationForAllProjectMemberStatus == "success") {
 
-            toast("Successfully created")
+            toast("Successfully sent")
             dispatch(emptyNotificationForAllProjectMemberStatus());
             setIsShowNotificationDialog(false);
 

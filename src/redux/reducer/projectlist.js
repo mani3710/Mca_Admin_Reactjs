@@ -163,6 +163,20 @@ export const sendNotificationToAllProjectMembers = createAsyncThunk(
             alert(error);
         }
     });
+
+export const sendNotificationForParticularBatch = createAsyncThunk(
+    'projectlist/sendNotificationForParticularBatch',
+    async (body) => {
+        try {
+
+            const result = await API.post(`/admin/notification/specific`, body);
+            console.log(result.data);
+            return { result: result.data };
+
+        } catch (error) {
+            alert(error);
+        }
+    });
 const projectlistSclice = createSlice({
     name: "projectlist",
     initialState: {
@@ -384,6 +398,22 @@ const projectlistSclice = createSlice({
 
         });
 
+        builder.addCase(sendNotificationForParticularBatch.pending, (state) => {
+            state.projectLoader = true;
+        });
+        builder.addCase(sendNotificationForParticularBatch.fulfilled, (state, action) => {
+            state.projectLoader = false;
+            if (action.payload.result.message == "Success") {
+                state.notificationForAllProjectMemberStatus = "success";
+
+            } else {
+                state.notificationForAllProjectMemberStatus = "failed";
+            }
+        });
+        builder.addCase(sendNotificationForParticularBatch.rejected, (state) => {
+            state.projectLoader = false;
+
+        });
 
     }
 });
