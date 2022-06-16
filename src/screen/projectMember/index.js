@@ -97,6 +97,8 @@ const ProjectMember = (props) => {
             setIsShowNotificationDialogStaff(false);
             setIsShowNotificationStaffSearch(false);
             setIsShowNotificationStudentSearch(false);
+            setSelectedStudentList([]);
+            setStaffSelectedList([]);
             dispatch(emptyNotificationForAllProjectMemberStatus());
 
         } else if (notificationForAllProjectMemberStatus == "failed") {
@@ -621,7 +623,7 @@ const ProjectMember = (props) => {
 
                     <Card.Body className="pl-3 " style={{ backgroundColor: "white" }}>
                         <center>
-                            <label style={{ fontWeight: "bold" }}>NOTIFICATION 1</label>
+                            <label style={{ fontWeight: "bold" }}>NOTIFICATION </label>
                             <form >
                                 <div style={{ marginTop: 28 }}>
                                     <input
